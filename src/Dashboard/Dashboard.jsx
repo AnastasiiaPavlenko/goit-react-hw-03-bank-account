@@ -16,6 +16,31 @@ class Dashboard extends Component {
         expenses: 0,
     };
 
+    componentDidMount() {
+        const Transactions = localStorage.getItem('transactions');
+        const Balance = localStorage.getItem('balance');
+        const Income = localStorage.getItem('income');
+        const Expenses = localStorage.getItem('expenses');
+        if (Transactions) {
+            this.setState({
+                transactions: JSON.parse(Transactions),
+                balance: JSON.parse(Balance),
+                income: JSON.parse(Income),
+                expenses: JSON.parse(Expenses),
+            })
+        }
+    };
+
+    componentDidUpdate(prevProps, prevState) {
+        const { transactions, balance, income, expenses } = this.state;
+        if (prevState.transactions !== this.state.transactions) {
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            localStorage.setItem('balance', JSON.stringify(balance));
+            localStorage.setItem('income', JSON.stringify(income));
+            localStorage.setItem('expenses', JSON.stringify(expenses));
+        }
+    };
+
     notifyA = () => toast('Введите сумму для проведения операции!');
     notifyB = () => toast('На счету недостаточно средств для проведения операции!');
     notifyD = () => toast('Сумма транзакции должна быть больше нуля!');
